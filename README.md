@@ -3,11 +3,11 @@
 
 **A bash script inspired by pentbox.**
 
-Designed to be a simple way to implement various network pentesting functions, including network attacks, using wherever possible readily available software commonly installed on most linux distributions without having to resort to multiple specialist tools.
+Designed to be a simple way to implement various network pentesting functions, including network attacks, using wherever possible readily available software commonly installed on most Linux distributions without having to resort to multiple specialist tools.
 
 http://technicalhelperchetan.com
 
-**Sudo is implemented where necesssary.**
+**Sudo is implemented where necessary.**
 
 Tested on Debian and Arch.
 
@@ -23,7 +23,7 @@ Tested on Debian and Arch.
 
 * hping3 (or nping can be used as a substitute for flood attacks)
 
-* openssl
+* OpenSSL
 
 * stunnel
 
@@ -81,10 +81,10 @@ Alternatively, use git clone, or download the latest release from https://github
 * UDP scan - uses nmap to scan for open UDP ports. All UDP ports are scanned.
 
 
-* Check Server Uptime - estimates the uptime of the target by querying an open TCP port with hping. Accuracy of the results varies from one machine to another; this does not work against all servers.
+* Check Server Uptime - estimates the uptime of the target by querying an open TCP port with hping. The accuracy of the results varies from one machine to another; this does not work against all servers.
 
 
-* IPsec Scan - attempts to identify the presence of an IPsec VPN server with the use of ike-scan and various Phase 1 proposals. Any text output from this module, whether it be regarding "handshake" or "no proposal chosen", indicates the presence of an IPsec VPN server.  See http://nta-monitor.com/wiki/index.php/Ike-scan_User_Guide for an excellent overview of ike-scan and VPN phase 1.
+* IPsec Scan - attempts to identify the presence of an IPsec VPN server with the use of ike-scan and various Phase 1 proposal. Any text output from this module, whether it be regarding "handshake" or "no proposal was chosen", indicates the presence of an IPsec VPN server.  See http://nta-monitor.com/wiki/index.php/Ike-scan_User_Guide for an excellent overview of ike-scan and VPN phase 1.
 
 
 **DOS MODULES**
@@ -98,7 +98,7 @@ Since the source is definable, it is simple to launch a LAND attack for example.
 
 
 * TCP ACK Flood - offers the same options as the SYN flood, but sets the ACK (Acknowledgement) TCP flag instead.
-Some systems will spend excessive CPU cycles processing such packets.  If the source IP is set to that of an established connection, it is possible that an estabished connection can be disrupted by this 'blind' TCP ACK Flood.  This attack is considered 'blind' because it does not take into account any details of any established connection (like sequence or acknowledgement numbers).  For more information see https://www.staminus.net/a-ddos-attack-explained-tcp-ack/ for example.
+Some systems will spend excessive CPU cycles processing such packets.  If the source IP is set to that of an established connection, it is possible that an established connection can be disrupted by this 'blind' TCP ACK Flood.  This attack is considered 'blind' because it does not take into account any details of any established connection (like sequence or acknowledgment numbers).  For more information see https://www.staminus.net/a-ddos-attack-explained-tcp-ack/ for example.
 
 
 * TCP RST Flood - offers the same options as the SYN flood, but sets the RST (Reset) TCP flag instead.
@@ -106,33 +106,33 @@ Such an attack could interrupt established connections if the source IP is set t
 See https://en.wikipedia.org/wiki/TCP_reset_attack for example.
 
 
-* TCP XMAS Flood - similar to the SYN and ACK floods, but sends packets with all TCP flags set (CWR,ECN,URG,ACK,PSH,RST,SYN,FIN).  The packet is considered to be 'lit up like a christmase tree'.  Theoretically at least, such a packet requires more resources for the receiver to process than a standard packet.
-However, such packets are quite indicative of unusual behaviour (such as an attack) and are usually easily identified by IDS/IDP.
+* TCP XMAS Flood - similar to the SYN and ACK floods, but sends packets with all TCP flags set (CWR, ECN, URG, ACK, PSH, RST, SYN, FIN).  The packet is considered to be 'lit up like a Christmas tree'.  Theoretically at least, such a packet requires more resources for the receiver to process than a standard packet.
+However, such packets are quite indicative of unusual behavior (such as an attack) and are usually easily identified by IDS/IDP.
 
 
-* UDP Flood - much like the TCP SYN Flood but instead sends UDP packets to the specified host:port. Like the TCP SYN Flood function, hping3 is used but if it is not found, it attempts to use nmap-nping instead.  All options are the same as TCP SYN Flood, except you can specify data to send in the UDP packets.
+* UDP Flood - much like the TCP SYN Flood but instead sends UDP packets to the specified host: port. Like the TCP SYN Flood function, hping3 is used but if it is not found, it attempts to use nmap-nping instead.  All options are the same as TCP SYN Flood, except you can specify data to send in the UDP packets.
 Again, this is a good way to check switch/router throughput or to test VOIP systems.
 
 
 * SSL DOS - uses OpenSSL to attempt to DOS a target host:port.  It does this by opening many connections and causing the server to make expensive handshake calculations.  This is not a pretty or elegant piece of code, do not expect it to stop immediately upon pressing 'Ctrl c', but it can be brutally effective.  
-The option for client renegotiation is given;  if the target server supports client initiated renegotiation, this option should be chosen.
+The option for client renegotiation is given;  if the target server supports client-initiated renegotiation, this option should be chosen.
 Even if the target server does not support client renegotiation (for example CVE-2011-1473), it is still possible to impact/DOS the server with this attack.  
-It is very useful to run this against loadbalancers/proxies/SSL-enabled servers (not just HTTPS!) to see how they cope under the strain.
+It is very useful to run this against load balancers/proxies/SSL-enabled servers (not just HTTPS!) to see how they cope under the strain.
 
 
-* Slowloris - uses netcat to slowly send HTTP Headers to the target host:port with the intention of starving it of resources.  This is effective against many, although not all, HTTP servers, provided the connections can be held open for long enough.  Therefore this attack is only effective if the server does not limit the time available to send a complete HTTP request.
+* Slowloris - uses netcat to slowly send HTTP Headers to the target host: port with the intention of starving it of resources.  This is effective against many, although not all, HTTP servers, provided the connections can be held open for long enough.  Therefore this attack is only effective if the server does not limit the time available to send a complete HTTP request.
 Some implementations of this attack use clearly identifiable headers which is not the case here.  The number of connections to open to the target is configurable. 
 The interval between sending each header line is configurable, with the default being a random value between 5 and 15 seconds. The idea is to send headers slowly, but not so slow that the servers idle timeout closes the connection.
 The option to use SSL (SSL/TLS) is given, which requires stunnel and allows the attack to be used against a HTTPS server.  You don't use the SSL option against a plain HTTP server.
 
-Defences against this attack include (but are not limited to):
+Defenses against this attack include (but are not limited to):
 
-Limiting the number of TCP connections per client; this will prevent a single machine from making the server unavailable, but is not effective if say, 10,000 clients launch the attack simultaneously.  Additionally, such a defensive measure may negatively impact multiple (legitimate) clients operating behind a forward proxy server.
+Limiting the number of TCP connections per client; this will prevent a single machine from making the server unavailable but is not effective if say, 10,000 clients launch the attack simultaneously.  Additionally, such a defensive measure may negatively impact multiple (legitimate) clients operating behind a forward proxy server.
 
 Limiting the time available to send a complete HTTP request; this is effective since the attack relies on slowly sending headers to the server (the server should await all headers from the client before responding).  If the server limits the time for receiving all headers of a request to 10 seconds (for example) it will severely limit the effectiveness of the attack.  It is possible that such a measure will prevent legitimate clients over slow/lossy connections from accessing the site.
 
 
-* IPsec DOS - uses ike-scan to attempt to flood the specified IP with Main mode and Aggressive mode Phase 1 packets from random source IP's.  Use the IPsec Scan module to identify the presence of an IPsec VPN server.
+* IPsec DOS - uses ike-scan to attempt to flood the specified IP with Main mode and Aggressive mode Phase 1 packet from random source IP's.  Use the IPsec Scan module to identify the presence of an IPsec VPN server.
 
 
 * Distraction Scan - this is not really a DOS attack but simply launches multiple TCP SYN scans, using hping, from a spoofed IP of your choosing (such as the IP of your worst enemy). It is designed to be an obvious scan in order to trigger any lDS/IPS the target may have and so hopefully obscure any actual scan or other action that you may be carrying out.
